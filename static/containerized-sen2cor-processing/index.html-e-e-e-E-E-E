@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Sen2cor Processing Handbook</title>
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=a931d041cb.css">
+
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Black-sky Albedo" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="The Sen2cor Processing Handbook" />
+    <meta property="og:description" content="This post is work in progress. You have been warned!
+
+
+Introduction
+
+The aim of me writing this document is for anyone with little prior knowledge of sentinel-2 data and its processing to learn all they need to know in order to get started working with it, and in particular the" />
+    <meta property="og:url" content="erikkallman.github.io/containerized-sen2cor-processing/" />
+    <meta property="og:image" content="erikkallman.github.io/content/images/2022/12/Screenshot-2022-12-02-at-13.15.21.png" />
+    <meta property="article:published_time" content="2022-12-13T16:06:14.000Z" />
+    <meta property="article:modified_time" content="2024-02-26T09:33:28.000Z" />
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Sen2cor Processing Handbook" />
+    <meta name="twitter:description" content="This post is work in progress. You have been warned!
+
+
+Introduction
+
+The aim of me writing this document is for anyone with little prior knowledge of sentinel-2 data and its processing to learn all they need to know in order to get started working with it, and in particular the" />
+    <meta name="twitter:url" content="erikkallman.github.io/containerized-sen2cor-processing/" />
+    <meta name="twitter:image" content="erikkallman.github.io/content/images/2022/12/Screenshot-2022-12-02-at-13.15.21.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Erik Källman" />
+    <meta name="twitter:site" content="@ghost" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="493" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Black-sky Albedo",
+        "url": "erikkallman.github.io/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "erikkallman.github.io/favicon.ico",
+            "width": 48,
+            "height": 48
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Erik Källman",
+        "url": "erikkallman.github.io/author/erik/",
+        "sameAs": []
+    },
+    "headline": "The Sen2cor Processing Handbook",
+    "url": "erikkallman.github.io/containerized-sen2cor-processing/",
+    "datePublished": "2022-12-13T16:06:14.000Z",
+    "dateModified": "2024-02-26T09:33:28.000Z",
+    "description": "This post is work in progress. You have been warned!\n\n\nIntroduction\n\nThe aim of me writing this document is for anyone with little prior knowledge of sentinel-2 data and its processing to learn all they need to know in order to get started working with it, and in particular the generation of an L2A product using the sen2cor processor. What that means should not be obvious to the reader. If it is, perhaps you can still gain some knowledge in skimming through the text, as I will try to explain a n",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "erikkallman.github.io/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.24" />
+    <link rel="alternate" type="application/rss+xml" title="Black-sky Albedo" href="../rss/index.html" />
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.20/umd/portal.min.js" data-ghost="erikkallman.github.io/" data-key="a7bfe472616e25a965e4ed9698" data-api="erikkallman.github.io/ghost/api/content/" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="a7bfe472616e25a965e4ed9698" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="erikkallman.github.io/" crossorigin="anonymous"></script>
+    <script defer src="../public/cards.min.js%3Fv=a931d041cb"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=a931d041cb.css">
+    <script defer src="../public/member-attribution.min.js%3Fv=a931d041cb"></script><style>:root {--ghost-accent-color: #7f7f7f;}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.x.x/themes/prism.min.css" />
+</head>
+
+<body class="post-template  is-head-left-logo">
+<div class="site">
+
+    <header id="gh-head" class="gh-head gh-outer">
+        <div class="gh-head-inner gh-inner">
+            <div class="gh-head-brand">
+                <div class="gh-head-brand-wrapper">
+                    <a class="gh-head-logo" href="../index.html">
+                            Black-sky Albedo
+                    </a>
+                </div>
+                <button class="gh-search gh-icon-btn" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                <button class="gh-burger"></button>
+            </div>
+
+            <nav class="gh-head-menu">
+                <ul class="nav">
+    <li class="nav-home"><a href="../index.html">Home</a></li>
+    <li class="nav-about"><a href="../about/index.html">About</a></li>
+</ul>
+
+            </nav>
+
+            <div class="gh-head-actions">
+                    <button class="gh-search gh-icon-btn" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                            <a class="gh-head-btn gh-btn gh-primary-btn" href="index.html#/portal/signup" data-portal="signup">Subscribe</a>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="site-content">
+        
+<main class="site-main">
+
+
+    <article class="post featured no-image">
+
+        <header class="gh-article-header gh-canvas">
+            <h1 class="gh-article-title">The Sen2cor Processing Handbook</h1>
+            <div class="post-meta">
+                Last updated on&nbsp;
+                <time datetime="2022-12-13">Feb 26, 2024</time>
+            </div>
+                    </header>
+
+        <div class="gh-content gh-canvas">
+            <p>This post is work in progress. You have been warned!</p><h2 id="introduction">Introduction</h2><p>The aim of me writing this document is for anyone with little prior knowledge of sentinel-2 data and its processing to learn all they need to know in order to get started working with it, and in particular the generation of an L2A product using the sen2cor processor. What that means should not be obvious to the reader. If it is, perhaps you can still gain some knowledge in skimming through the text, as I will try to explain a number of terms and concepts that are sources of confusion and are typically dropped into the litterature without much further explanation. <br><br>The text is written informally to be easy to digest, and Im hoping that in the end it will serve as the reference point that I would have liked to have put under my nose when first venturing into the space of earth observation.</p><p>To understand what we need to do in order to reach the level-2 A product starting from the raw satellite output, it is first neccessary to review what steps are involved in producing the level-1 input product from the "raw" level-0 data. We need to get some basics covered. What the sensor measures and how its ability to do those measurements is quantified is described briefly in the follwing two subsections. See these sections as building a common vocabulary for the later sections. </p><h3 id="resolution-metrics">Resolution metrics</h3><p>Firstly we will briefly talk about the metrics by which we measure resolution of data obtained and derived from the satellite sensors.</p><p><strong>Spatial resolution </strong>in the context of the sentinel instruments is the area of ground covered by a single pixel. While this may be obvious, that this resolution is <a href="https://sentinels.copernicus.eu/web/sentinel/user-guides/Sentinel-2-msi/resolutions/spatial">wavelength dependent </a>may not be. Additionally, each band is measured in one spatial resolution only, but can of course be up or downsampled to the users liking with the product on hand.</p><p>This term should not be confused with <a href="https://sentinels.copernicus.eu/web/sentinel/missions/sentinel-2/instrument-payload/resolution-and-swath"><strong>spectral resolution</strong></a>, which measures the ability of an instrument to resolve a particular part of the electromagnetic spectrum. This is also wavelength dependent, and an instrument never measures at a singular wavelength value but rather always over a bandwidth in a certain range, for a certain spatial resolution and wavelength.</p><p>Sentinel-2 is a set of two satellites - a "constellation". While this constellation consists of sensor platforms that are similar, they are not identical in exactly what wavelengths they measure (see table below as an example for the difference between the two satellites in the sentinel 2 constellation).</p><!--kg-card-begin: html--><table xmlns="http://www.w3.org/1999/xhtml" dir="ltr" style="table-layout:fixed;font-size:10pt;font-family:Arial;width:0px;border-collapse:collapse;border:none" cellspacing="0" cellpadding="0" border="1"><colgroup><col width="157"><col width="110"><col width="138"><col width="147"></colgroup><tbody><tr style="height:21px;"><td style="border-top:1px solid #000000;border-right:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;font-weight:bold;text-align:center;" rowspan="2" colspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Spatial Resolution\n (m)&quot;}"><span><div style="max-height:42px">Spatial Resolution<br> (m)</div></span></td><td style="border-top:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;font-weight:bold;text-align:center;" rowspan="2" colspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Band Number&quot;}"><span><div style="max-height:42px">Band Number</div></span></td><td style="border-top:1px solid #000000;border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;font-weight:bold;text-align:center;" rowspan="1" colspan="2" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;S2A, S2B difference (abs)&quot;}">S2A, S2B difference (abs)</td></tr><tr style="height:21px;"><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;font-weight:bold;text-align:center;" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Central Wavelength\n (nm)&quot;}">Central Wavelength<br> (nm)</td><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;font-weight:bold;text-align:center;" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Bandwidth\n (nm)&quot;}">Bandwidth<br> (nm)</td></tr><tr style="height:21px;"><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" rowspan="4" colspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}"><span><div style="max-height:84px">10</div></span></td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2}">2</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.2999999999999545}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.3</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.7999999999999545}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.8</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.2999999999999545}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.3</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.10000000000002274}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.1</td><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" rowspan="6" colspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}"><span><div style="max-height:126px">20</div></span></td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.3000000000000682}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.3</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1.3999999999999773}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1.4</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3.099999999999909}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">3.1</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;8a&quot;}">8a</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.7000000000000455}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.7</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3.2999999999999545}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">3.3</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">3</td></tr><tr style="height:21px;"><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:16.700000000000273}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">16.7</td><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">10</td></tr><tr style="height:21px;"><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" rowspan="3" colspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60}"><span><div style="max-height:63px">60</div></span></td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1}">1</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.5}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0.5</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">0</td></tr><tr style="height:21px;"><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9}">9</td><td style="overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1.8999999999999773}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1.9</td><td style="border-right:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1</td></tr><tr style="height:21px;"><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:center;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td><td style="border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3.400000000000091}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">3.4</td><td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:2px 3px 2px 3px;vertical-align:bottom;text-align:right;" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1}" data-sheets-formula="=abs(R[-19]C[0]-R[-19]C[2])">1</td></tr></tbody></table><!--kg-card-end: html--><p>We can observe that the difference in both central wavelength and bandwidth varies between bands, and band 12 at 2190 nm shows a larger deviation. However, since we are already in the short wave infrared part of the spectrum, this deviation is relatively small (about 0.8%). Having a precise measure of the central wavelength gives the ground segment a number to correct for in calculating the radiance values. More on that in the processing section, and the below section on units.</p><p>Note that certain bands are processed only to a certain spatial resolution. We will return to this in later sections where we talk about requesting specific spatial resultions to be produced by sen2cor.</p><p>Finally, there is <strong><a href="https://sentinels.copernicus.eu/web/sentinel/user-guides/Sentinel-2-msi/resolutions/radiometric">radiometric resolution</a></strong>, which measures the range of brightness values that can be recorded by the satellite and is bounded by the interger type - 12 bit in the case of Sentinel-2 - used to store the data which limits it to integers between 0 to 4095. This can be thought of as the "dynamic range" in photography terms.</p><h3 id="units">Units</h3><p>As hinted at in the resolution section above, the radiance values (energy flux) recorded at the sensor are rescaled into a digital representation from a unit often measured in watt/(steradian/square meter). Steradian, or "square radian" here being the SI unit for volumetric angles compared to the radian being the unit for planar angles. </p><p>To make this perfectly clear: one radian unit of angle represents the angle in planar section of a circle where the circumference cut of the circle is equal to its radius. Correspondingly, the one steradian represents the volumetric element where the surface area of a cone is a circle of area radius^2. So nothing more exotic than a radian in three dimensions (how can we genereralize the radian to four, or five dimensions?).</p><p>Note that the digital number resulting in a derived radiance value is taken at sensor level - there is no separation of radiance sources (atmosphere, land objects, etc) in the recording of the data. Any diffuse medium between the land object and the sensor (a cloud for instance) will  diminish the radiance contribution from that object and render it more diffusely. More on this, and other correction steps, in later sections where we discuss data processing.</p><p>Reflectance should not be confused with Radiance, in that it is the ratio of the quantity of radiation reflected from a target to the radiation incident on the target. Therefore it is unitless and depends directly on the material being observed.</p><p>These two terms - reflectance and radiance - are sometimes used interchangebly and in others with minor variations depending on the physics of the system being observed. In both cases it is worth remembering that the sensor doesnt measure either of them but rather the energy flux incident on the sensor, which can then be converted (or re-scaled) to an unsigned interger that represents the physical variable.</p><h2 id="sentinel-2-data-processing">Sentinel 2 data processing</h2><p>The sections below detail the different steps or processing levels that the raw data from the satellite is subject to after having been recieved at the ground station. </p><p>There is always error in physical measurements, and we will start by considering the sources of error or image distortion that apply to satellite data. In general terms there are four categories of sources for satellite image distortion, and they are briefly described below.</p><h4 id="the-sensor">The sensor </h4><p>The digital output from the sensor deployed on the satellite is subject to degradation, as well as minute mechanical differences for a type of sensor in a production series. Therefore, it is not suitable to use the raw output from them as spectral measures. Instead they must be scaled into a number of a certain bit depth by using suitable calibration coefficients. This process converts digital sensor numbers to what is typically refered to in the litterature as <strong>at-sensor radiance. </strong>This is different from sensor calibration, which is the process of modelling sensor degradation and deriving calibrations coefficients as a function of sensor usage over time.</p><h4 id="the-sun">The sun</h4><p>Once the at-sensor radiance values are obtained, the next step would account for solar radiation interference and earth-sun geometry, which is dependent on latitude and datum, to obtain values of top-of-atmosphere (TOA) reflectance. The effect of this source of distortions depend on solar power (which varies over time), the solar elevation angle (determining the amount of light reflected) and the Earth-Sun distance (which also varies over time). </p><p>Thankfully, while solar flux can be a complicated process to model depending on the need for detail, the Earth and the Sun are reasonably well-behaved celestial bodies and the geometric relationships between them are easily calculated. It is worth noting that in some litterature, correcting for this is sometimes grouped together with the sensor correction step.</p><h4 id="the-atmosphere">The atmosphere</h4><p></p><h4 id="top-of-atmosphere-radiance">Top of Atmosphere Radiance</h4><p>Radiation, both from terrestial and interstellar sources, has varying probability of scattering in parts of the volume segment from the surface of the earth to the sensor platform of the satellite. As such, the observed radiation is a superposition of all of those scattering processes distributed over space and wavelength. What that mix of scattered radiation consists of depends on a great variety of physical processes - Rayleigh scattering in the atmosphere, for instance, results in a large part of the blue region of the visible spectrum scattering in the atmosphere.</p><p>Knowing what processes and types of radiation yield what type of scattering allows us to selectively correct for certain regions. Removing the scattered light in the atmosphere and only preserving the surface contribution provides a bottom of atmosphere (BOA) corrected product, and the inverse is true for the top of atmopshere (TOA) variation. However, simply knowing that a data product has been TOA or BOA corrected is no enough since there are many ways of caluculating those values. The user is adviced to read up on what kind of correction has been applied, before using the data in their analysis.</p><p>Reflectance is dimensionless because radiance is divided by irradiance so the units cancel. However (and this confuses many people) reflectance is not constrained to fall between 0-1; sometimes it is stored in integer format (e.g. 12-bit or 16- bit) because floating point format (0-1) takes up too much disk space. If you have pixel values of 1000 then the data can certainly be in top-of-atmosphere or surface reflectance. However, you need to look at the metadata and/or read the data description to be certain what level of processing the data had. Do not look at the data and try to make guesses about the processing - the level of processing is explained in the data documentation.If you are using Landsat climate data record (CDR) data then it is mostly in surface reflectance but it needs to be slightly rescaled as well as have a sun angle correction applied. If the data was distributed as TOA reflectance then the radiance at the Landsat sensor was divided by the exo-atmospheric irradiance and this is better than nothing but there will be band-specific biases (according to Rayleigh scattering).</p><hr><p>The energy that is captured by Landsat sensors is influ- enced by the Earth’s atmosphere. These effects include scattering and absorption due to interactions of the elec- tromagnetic radiation with atmospheric particles (i.e.,gases, water vapor, and aerosols)</p><p>However, some atmospheric effects are highly variable over the Earth’s surface and can be difficult to correct in Landsat imagery. While it is not always necessary to atmospherically correct Landsat data to surface values, there are instances where this level of correction is needed. In general, absolute atmospheric corrections are needed when (1) an empirical model is being created for application beyond the data used to develop it, (2) there is a comparison being made to ground reflectance data such as a field-based spectroradi- ometer, or (3) as an alternative to relative correction when comparisons are being made across multiple images. All atmospheric correction methods have associated assump- tions about the target and the nature of the atmospheric particles or emissivity (for land surface temperature). There are numerous atmospheric correction methods available, ranging from simple approaches that use only within-image information such as dark object subtraction (Chavez 1988), to more complex and data-intensive approaches such as the method used for the Landsat Ecosystem Disturbance Adaptive Processing System (LEDAPS) products (Masek et al. 2006)</p><h4 id="the-topography">The topography</h4><p>while others specifically address potential artifacts (e.g., topographic correction).</p><p>The processes of georeferencing (alignment of imagery to its correct geographic location) and orthorectifying (correction for the effects of relief and view direction on pixel location) are components of geometric correction necessary to ensure the exact positioning of an image. Imagery can be positioned relative to the datum, topog- raphy, or other data types, including reference data and additional geospatial layers that might be used in the analyses.</p><p>Discrepancies should be corrected prior to analysis using a process known as co-registration (often referred to as just registration). Registration involves aligning data layers relative to one another, while georef- erencing involves aligning layers to the correct geographic location. Registration is a critical step in preprocessing Landsat imagery for ecological analysis, since a misregis- tration can result in significant errors, especially in change detection analyses (Sundaresan et al. 2007). When relating Landsat data to ancillary georeferenced data, such as GPS-marked plot data, images should be georeferenced rather than registered to maintain alignment between data. There are numerous approaches for both georefer- encing and registering Landsat data, and the process might involve a simple pixel shift or a more complex auto- mated feature detection and matching between images (for review, see Brown 1992, Zitová and Flusser 2003).</p><p>Solar correction does not account for illumination effects from slope, aspect, and elevation that can cause variations in reflectance values for similar features with different terrain positions (Riaño et al. 2003). Topographic correction is the process used to account for these effects. While this correction is not always required, it can be especially important for applications in mountain systems or rugged terrain (Colby 1991, Riaño et al. 2003, Shepherd and Dymond 2003), which are common settings for sat- ellite monitoring due to the difficulty of accessing these environments for field measurements.</p><p>An important distinction should be made between top- ographic and terrain correction. Topographic correction is a radiometric process while terrain correction is geometric in nature. Although Landsat Level-1 products are terrain corrected, this does not account for the same effects as a topographic correction. Terrain correction ensures each pixel is displayed as viewed from directly above regardless of topography or view angle, and, while important, does not account for the same effects as top- ographic correction.</p><p>While this preproc- essing step can be more important than atmospheric correction for some applications in topographically complex regions (Vanonckelen et al. 2013), this step is not needed for every scenario.</p><p></p><p>Correcting for these they may be computationally costly and the corrections themselves are imperfect. They may introduce artifacts in the data, for instance, or only partially capable of correcting for the effect they are designed for. The correction for these distortions and how they are adressed are often mentioned in bullet-point fashion in documentation, but without much reference, resoning or justification.</p><p> </p><h3 id="level-0"><a href="https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-2-msi/product-types/level-0">Level-0</a></h3><p>The Sentinel-2 Level 0 product, unlike L1C, is not available for public access and is the first processing level performed by the Payload Data Ground Segment (<a href="https://sentinels.copernicus.eu/web/sentinel/missions/sentinel-2/ground-segment/core-ground-segment/pdgs">PDGS</a>). Its processing step takes the MSI raw data as input from th Copernicus <a href="https://sentinels.copernicus.eu/web/sentinel/missions/sentinel-2/ground-segment">Ground Segment</a> and ..</p><ul><li>error checks the satellite telemetry data,</li><li>generates a preliminary low-res image and cloudmask for early filtering of data of poor quality,</li><li>dates the individual lines in the recieved image to enable the exact capture time of each ISP within a predefined granule (geographic region) to be recorded,</li><li>packages Instrument Source Packets obtained from the satellite ground station network into granules</li></ul><h3 id="level-0-consolidated">Level-0 Consolidated</h3><p>This intermediary product contains L-0 and all the meta-data required for subsequent L1 processing. These packets of data are compressed and stored. Like the L0 product L0C is not available to the public.</p><h3 id="level-1-a">Level-1 A</h3><p>This processing step refers to the decompression of the L0C product and applies no processing beyond that.</p><h3 id="level-1-b">Level-1 B</h3><p></p><h4></h4><ol><li>Level-1B radiometric processing, including:</li></ol><ul><li>dark signal correction</li><li>pixel response non-uniformity correction</li><li>crosstalk correction</li><li>defective pixels identification</li><li>high spatial resolution bands restoration (de-convolution and de-noising)</li><li>binning of the 60 m spectral bands.</li></ul><ol><li>Resampling on the common geometry grid for registration between the Global Reference Image (GRI) and the reference band (B4 by default).</li><li>Collection of the tie-points from the two images for registration between the GRI and the reference band.</li><li>Tie-points filtering for image-GRI registration: filtering of the tie-points over several areas. A minimum number of tie-points is required.</li><li>Refinement of the viewing model using the initialised viewing model and and Ground Control Points (GCPs). The output refined model ensures registration between the GRI and the reference band.</li><li>Level-1B imagery compression utilises the JPEG2000 algorithm.</li></ol><h3 id="level-1">Level 1</h3><p>‌‌Sentinel-2 MSI L1C data undergoes a number of pre-processing steps before it is ready for use. These steps include radiometric and geometric correction, atmospheric correction, and cloud and water masking.‌‌‌‌‌‌‌‌DEM <a href="https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/definitions">https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/definitions</a></p><p>Radiometric correction is applied to adjust the data to account for variations in the instrument's sensitivity and to remove any effects of the atmosphere on the measured radiance.</p><p>Geometric correction is applied to remove any distortion in the image caused by the satellite's motion and to project the data onto a consistent map projection.</p><p>Atmospheric correction is applied to remove the effects of the atmosphere on the measured radiance. This step is necessary because the atmosphere can cause the measured radiance to be either higher or lower than the actual surface reflectance.</p><p>Cloud and water masking is applied to identify and mask out any clouds or water bodies in the image. This step is necessary because clouds and water can interfere with the analysis of the data.</p><p>Overall, the pre-processing steps applied to Sentinel-2 MSI L1C data are designed to correct for various factors that can affect the quality of the data and to make the data more consistent and usable for various applications.</p><h2 id="outlook-and-advice">Outlook and advice</h2><p>We recommend taking a parsimonious approach to preprocessing; correct the artifacts necessary for a par- ticular application, but avoid unnecessary steps that may introduce additional artifacts without gaining additional value (Song et al. 2001, Riaño et al. 2003, Kennedy et al. 2009).</p><p>Sources, further reading:</p><ul><li>Young, Nicholas &amp; Anderson, Ryan &amp; Chignell, Stephen &amp; Vorster, Anthony &amp; Lawrence, Rick &amp; Evangelista, Paul. 2017. <em>A survival guide to Landsat preprocessing</em>. Ecology. 98. 920-932. 10.1002/ecy.1730.</li><li>Gyanesh Chander, Brian L. Markham, Dennis L. Helder. 2009. <em>Summary of current radiometric calibration coefficients for Landsat MSS, TM, ETM+, and EO-1 ALI sensors</em>, Remote Sensing of Environment, Volume 113, Issue 5, Pages 893-903,‌‌</li></ul>
+        </div>
+
+        <div class="pagination-container gh-canvas">
+        <nav class="pagination">
+
+            <div class="pagination-left">
+            </div>
+
+            <div class="pagination-right">
+                    <a class="older-posts" href="../distributed-quantum-computing/index.html">
+                        <span class="pagination-label">Next</span>
+                        Distributed Quantum Computing
+                    </a>
+            </div>
+
+        </nav>
+        </div>
+
+
+    </article>
+
+
+</main>
+    </div>
+
+    <footer class="gh-foot gh-outer">
+        <div class="gh-foot-inner gh-inner">
+            <div class="gh-copyright">
+                Black-sky Albedo © 2024
+            </div>
+            <nav class="gh-foot-menu">
+                <ul class="nav">
+    <li class="nav-sign-up"><a href="index.html#/portal/">Sign up</a></li>
+</ul>
+
+            </nav>
+            <div class="gh-powered-by">
+                <a href="https://ghost.org/" target="_blank" rel="noopener">Powered by Ghost</a>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+</script>
+<script src="../assets/built/main.min.js%3Fv=a931d041cb"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.x.x/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.x.x/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.x.x/components/prism-rust.min.js"></script>
+
+</body>
+</html>
